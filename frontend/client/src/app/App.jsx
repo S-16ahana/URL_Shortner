@@ -3,13 +3,14 @@ import "./App.css";
 import axios from "axios";
 
 const App = () => {
+  const API_URL = import.meta.env.VITE_API_URL;
   const [urls, setUrls] = useState([]);
   const [inputValue, setInputValue] = useState("");
   const [currentUrl, setCurrentUrl] = useState(null);
   const [copiedId, setCopiedId] = useState(null);
 
   async function fetchUrls() {
-    const response = await axios.get("http://localhost:5173/api/url");
+    const response = await axios.get(`${API_URL}/api/url`);
     const responseData = response.data;
 
     setUrls(responseData.data.urls);
@@ -20,7 +21,7 @@ const App = () => {
       return;
     }
 
-    const response = await axios.post("http://localhost:5173/api/url", {
+    const response = await axios.post(`${API_URL}/api/url`, {
       url: inputValue,
     });
 
@@ -29,7 +30,7 @@ const App = () => {
     setCurrentUrl({
       originalUrl: response.data.data.url,
       shortCode: shortCode,
-      shortUrl: `http://localhost:3000/${shortCode}`,
+      shortUrl: `${API_URL}/${shortCode}`,
     });
 
     setInputValue("");
@@ -37,7 +38,7 @@ const App = () => {
   }
 
   async function deleteUrl(id) {
-    await axios.delete(`http://localhost:5173/api/url/${id}`);
+    await axios.delete(`${API_URL}/api/url/${id}`);
 
     if (currentUrl) {
       setCurrentUrl(null);
@@ -149,7 +150,7 @@ const App = () => {
               </div>
             ) : (
               urls.map((url) => {
-                const shortUrl = `http://localhost:3000/${url.shortCode}`;
+                const shortUrl = `${API_URL}/${url.shortCode}`;
 
                 return (
                   <div
